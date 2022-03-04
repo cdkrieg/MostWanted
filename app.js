@@ -43,7 +43,7 @@ function mainMenu(person, people){
     displayPerson(person);
     break;
     case "family":
-    // TODO: get person's family
+    displayPerson(person)
     break;
     case "descendants":
     // TODO: get person's descendants
@@ -98,6 +98,36 @@ function searchByEyeColor(people){
 
 }
 
+function searchByID(id){
+  
+  let foundPerson = people.filter(function(potentialMatch){
+    if(potentialMatch.id === id){
+      return true;
+    }
+    else{
+      return false;
+    }
+  })
+  
+  return foundPerson;
+
+}
+
+function searchByParent(person){
+  
+  let foundPerson = people.filter(function(potentialMatch){
+    if(potentialMatch.id === id){
+      return true;
+    }
+    else{
+      return false;
+    }
+  })
+  
+  return foundPerson;
+
+}
+
 //TODO: add other trait filter functions here.
 
 
@@ -128,6 +158,17 @@ function displayPerson(person){
   personInfo += "Occupation: " + person.occupation + "\n";
   alert(personInfo);
 }
+
+function displayFamily(person){
+  let spouse = searchByID(person.currentSpouse);
+  let parents = searchByID(person.parents);
+  let familyInfo = "Spouse: " + spouse.firstName + " " + spouse.lastName + "\n";
+  for (let i = 0; i < parents.length; i++){
+    familyInfo += "Parent: " + person.firstName + " " + person.lastName + "\n";
+  }
+}
+
+
 
 //#endregion
 
