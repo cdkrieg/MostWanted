@@ -15,7 +15,7 @@ function app(people){
       searchResults = searchByName(people);
       break;
     case 'no':
-      // TODO: search by traits
+      searchResults = searchByEyeColor(people);
       break;
       default:
     app(people); // restart app
@@ -40,7 +40,7 @@ function mainMenu(person, people){
 
   switch(displayOption){
     case "info":
-    // TODO: get person's info
+    displayPerson(person);
     break;
     case "family":
     // TODO: get person's family
@@ -65,7 +65,6 @@ function mainMenu(person, people){
 /////////////////////////////////////////////////////////////////
 //#region 
 
-//nearly finished function used to search through an array of people to find matching first and last name and return a SINGLE person object.
 function searchByName(people){
   let firstName = promptFor("What is the person's first name?", autoValid);
   let lastName = promptFor("What is the person's last name?", autoValid);
@@ -78,12 +77,24 @@ function searchByName(people){
       return false;
     }
   })
-  // TODO: find the person single person object using the name they entered.
+  
   return foundPerson[0];
 }
 
 //unfinished function to search through an array of people to find matching eye colors. Use searchByName as reference.
 function searchByEyeColor(people){
+  let eyeColor = prompt("What is the person's eye color?", autoValid);
+
+  let foundPerson = people.filter(function(potentialMatch){
+    if(potentialMatch.eyeColor === eyeColor){
+      return true;
+    }
+    else{
+      return false;
+    }
+  })
+  
+  return foundPerson;
 
 }
 
@@ -110,7 +121,11 @@ function displayPerson(person){
   // height, weight, age, name, occupation, eye color.
   let personInfo = "First Name: " + person.firstName + "\n";
   personInfo += "Last Name: " + person.lastName + "\n";
-  // TODO: finish getting the rest of the information to display.
+  personInfo += "Gender: " + person.gender + "\n";
+  personInfo += "Date of Birth: " + person.dob + "\n";
+  personInfo += "Height and Weight: " + person.height + " inches, " + person.weight + " lbs" + "\n";
+  personInfo += "Eye Color: " + person.eyeColor + "\n";
+  personInfo += "Occupation: " + person.occupation + "\n";
   alert(personInfo);
 }
 
