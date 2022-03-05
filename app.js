@@ -167,7 +167,7 @@ function searchForKids(person, people) {
   }
 }
 function searchForSiblings(person, people) {
-  let siblings= [];
+  let siblings = [];
   if (person.parents.length === 2) {
     for (let i = 0; i < person.parents.length; i++) {
       siblings = people.filter(function (potentialMatch) {
@@ -181,12 +181,11 @@ function searchForSiblings(person, people) {
         }
         //breakpoint
       });
-    };
-    siblings = siblings.map(function(name){
-      return name.firstName + ' ' + name.lastName 
-    })
+    }
+    siblings = siblings.map(function (name) {
+      return name.firstName + " " + name.lastName;
+    });
   } else if (person.parents.length === 1) {
-
     siblings = people.filter(function (potentialMatch) {
       if (
         potentialMatch.parents.includes(person.parents[0]) &&
@@ -196,11 +195,10 @@ function searchForSiblings(person, people) {
       } else {
         return false;
       }
-
     });
-    siblings = siblings.map(function(name){
-      return name.firstName + ' ' + name.lastName 
-    })
+    siblings = siblings.map(function (name) {
+      return name.firstName + " " + name.lastName;
+    });
     //breakpoint
   } else {
     siblings = "No siblings";
@@ -250,7 +248,13 @@ function displayFamily(person, people) {
   let parents = searchForParents(person, people);
   let siblings = searchForSiblings(person, people);
   alert(
-    "Spouse: " + spouse + " " + "Parent(s): " + parents + ", Sibling(s): " + siblings
+    "Spouse: " +
+      spouse +
+      " " +
+      "Parent(s): " +
+      parents +
+      ", Sibling(s): " +
+      siblings
   );
 }
 
@@ -259,6 +263,14 @@ function displayDescendants(person, people) {
   alert("Kids: " + kids);
 }
 
+function giveName(names) {
+  let namesCompleted = names
+    .map(function (names) {
+      return names.firstName + " " + names.lastName;
+    })
+    .join("\n");
+  return namesCompleted;
+}
 //#endregion
 
 //Validation functions.
