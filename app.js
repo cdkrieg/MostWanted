@@ -77,7 +77,6 @@ function mainMenu(person, people) {
 function searchByName(people) {
   let firstName = promptFor("What is the person's first name?", autoValid);
   let lastName = promptFor("What is the person's last name?", autoValid);
-
   let foundPerson = people.filter(function (potentialMatch) {
     if (
       potentialMatch.firstName === firstName &&
@@ -88,15 +87,14 @@ function searchByName(people) {
       return false;
     }
   });
-
   return foundPerson[0];
 }
 
 //unfinished function to search through an array of people to find matching eye colors. Use searchByName as reference.
 //TODO: add other trait filter functions here.
+
 function searchByEyeColor(people) {
   let eyeColor = prompt("What is the person's eye color?", autoValid);
-
   let foundPerson = people.filter(function (potentialMatch) {
     if (potentialMatch.eyeColor === eyeColor) {
       return true;
@@ -104,10 +102,9 @@ function searchByEyeColor(people) {
       return false;
     }
   });
-
   return foundPerson;
 }
-
+//DONE
 function searchByID(id, people) {
   let foundPerson = people.filter(function (potentialMatch) {
     if (potentialMatch.id === id) {
@@ -116,10 +113,9 @@ function searchByID(id, people) {
       return false;
     }
   });
-
   return foundPerson[0];
 }
-
+//DONE
 function searchForParents(person, people) {
   if (person.parents.length == 1) {
     let parent = searchByID(person.parents[0], people);
@@ -133,7 +129,7 @@ function searchForParents(person, people) {
     return "No Parents";
   }
 }
-
+//DONE
 function searchForSpouse(person, people) {
   let spouse = searchByID(person.currentSpouse, people);
   if (spouse) {
@@ -143,6 +139,7 @@ function searchForSpouse(person, people) {
   }
   return spouse;
 }
+//DONE
 function searchForKids(person, people) {
   let kids = [];
   kids = people.filter(function (potentialMatch) {
@@ -162,10 +159,8 @@ function searchForKids(person, people) {
   } else {
     return "No Children";
   }
-
-  
 }
-
+//DONE
 function searchForGrandkids(parents, people){
   let grandKids = parents.map(function(parent){
     return people.filter(function (potentialMatch) {
@@ -192,7 +187,7 @@ function searchForGrandkids(parents, people){
   }
   
 }
-
+//DONE
 function searchForSiblings(person, people) {
   let siblings = [];
   if (person.parents.length === 2) {
@@ -247,7 +242,7 @@ function displayPeople(people) {
       .join("\n")
   );
 }
-
+//DONE
 function displayPerson(person) {
   // print all of the information about a person:
   // height, weight, age, name, occupation, eye color.
@@ -266,7 +261,7 @@ function displayPerson(person) {
   personInfo += "Occupation: " + person.occupation + "\n";
   alert(personInfo);
 }
-
+//DONE
 function displayFamily(person, people) {
   let spouse = searchForSpouse(person, people);
   let parents = searchForParents(person, people);
@@ -281,12 +276,12 @@ function displayFamily(person, people) {
       siblings
   );
 }
-
+//DONE
 function displayDescendants(person, people) {
   let kids = searchForKids(person, people);
   alert("Kids: " + kids);
 }
-
+//DONE
 function giveName(names) {
   let namesCompleted = names
     .map(function (names) {
