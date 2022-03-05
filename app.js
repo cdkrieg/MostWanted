@@ -93,6 +93,7 @@ function searchByName(people) {
 }
 
 //unfinished function to search through an array of people to find matching eye colors. Use searchByName as reference.
+//TODO: add other trait filter functions here.
 function searchByEyeColor(people) {
   let eyeColor = prompt("What is the person's eye color?", autoValid);
 
@@ -143,10 +144,13 @@ function searchForParents(person, people) {
 
 function searchForSpouse(person, people) {
   let spouse = searchByID(person.currentSpouse, people);
-  spouse = spouse.firstName + " " + spouse.lastName;
+  if (spouse) {
+    spouse = spouse.firstName + " " + spouse.lastName;
+  } else {
+    spouse = "No Spouse";
+  }
   return spouse;
 }
-//TODO: add other trait filter functions here.
 function searchForKids(person, people) {
   let kids = [];
   kids = people.filter(function (potentialMatch) {
@@ -158,25 +162,50 @@ function searchForKids(person, people) {
   });
   if (kids.length > 0) {
     for (let i = 0; i < kids.length; i++) {
-      searchForKids(kids[i])
+      searchForKids(kids[i]);
     }
   }
 }
-searchForSiblings(person, people){
-  let siblings = [];
-  siblings = people.filter(function (potentialMatch) {
-    if (potentialMatch.parents.includes(person.id) && potentialMatch.id != person.id) {
-      return true;
-    } else {
-      return false;
+function searchForSiblings(person, people) {
+  let siblings = [{}];
+  if (person.parents.length === 2) {
+    for (let i = 0; i < person.parents.length; i++) {
+      siblings += people.filter(function (potentialMatch) {
+        if (
+          potentialMatch.parents.includes(person.parents[i]) &&
+          potentialMatch.id != person.id
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+        //breakpoint
+      });
     }
-  });
-  if (siblings.length > 0) {
-    for (let i = 0; i <siblings.length; i++) {
-      eval('siblings' + i) 
-    }
+    siblings = siblings.map(function(name){
+      return name.firstName + ' ' + name.lastName 
+    })
+  } else if (person.parents.length === 1) {
+
+    siblings += people.filter(function (potentialMatch) {
+      if (
+        potentialMatch.parents.includes(person.parents[0]) &&
+        potentialMatch.id != person.id
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+
+    });
+    siblings = siblings.map(function(name){
+      return name.firstName + ' ' + name.lastName 
+    })
+    //breakpoint
+  } else {
+    siblings = "No siblings";
   }
-  return siblings
+  return siblings;
 }
 
 //#endregion
@@ -220,12 +249,14 @@ function displayFamily(person, people) {
   let spouse = searchForSpouse(person, people);
   let parents = searchForParents(person, people);
   let siblings = searchForSiblings(person, people);
-  alert("Spouse: " + spouse + " " + "Parents: " + parents + "Siblings: " + siblings);
+  alert(
+    "Spouse: " + spouse + " " + "Parents: " + parents + "Siblings: " + siblings
+  );
 }
 
 function displayDescendants(person, people) {
   let kids = searchForKids(person, people);
-  //kids searchForKids
+  alert("Kids: " + kids);
 }
 
 //#endregion
