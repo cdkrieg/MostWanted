@@ -54,7 +54,6 @@ function mainMenu(person, people) {
       displayFamily(person, people);
       break;
     case "descendants":
-      // TODO: get person's descendants
       displayDescendants(person, people);
       break;
     case "restart":
@@ -104,6 +103,64 @@ function searchByEyeColor(people) {
   });
   return foundPerson;
 }
+
+function searchByDOB(people) {
+  let dateOfBirth = prompt("What is the person's date of birth?", autoValid);
+  let foundPerson = people.filter(function (potentialMatch) {
+    if (potentialMatch.dob === dateOfBirth) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
+function searchByHeight(people) {
+  let height = prompt("What is the person's height?", autoValid);
+  let foundPerson = people.filter(function (potentialMatch) {
+    if (potentialMatch.height === height) {
+      return true;
+    } else {
+      return false;
+    } 
+  });
+  return foundPerson;
+}
+function searchByWeight(people) {
+  let weight = prompt("What is the person's weight?", autoValid);
+  let foundPerson = people.filter(function (potentialMatch) {
+    if (potentialMatch.weight === weight) {
+      return true;
+    } else {
+      return false;
+    } 
+  });
+  return foundPerson;
+}
+function searchByOccupation(people) {
+  let occupation = prompt("What is the person's occupation", autoValid);
+  let foundPerson = people.filter(function (potentialMatch) {
+    if (potentialMatch.occupation === occupation) {
+      return true;
+    } else {
+      return false;
+    } 
+  });
+  return foundPerson;
+}
+function searchByGender(people) {
+  let gender = prompt("What is the person's gender?", autoValid);
+  let foundPerson = people.filter(function (potentialMatch) {
+    if (potentialMatch.gender === gender) {
+      return true;
+    } else {
+      return false;
+    } 
+  });
+  return foundPerson;
+}
+
+
 //DONE
 function searchByID(id, people) {
   let foundPerson = people.filter(function (potentialMatch) {
