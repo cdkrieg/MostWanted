@@ -167,10 +167,10 @@ function searchForKids(person, people) {
   }
 }
 function searchForSiblings(person, people) {
-  let siblings = [{}];
+  let siblings= [];
   if (person.parents.length === 2) {
     for (let i = 0; i < person.parents.length; i++) {
-      siblings += people.filter(function (potentialMatch) {
+      siblings = people.filter(function (potentialMatch) {
         if (
           potentialMatch.parents.includes(person.parents[i]) &&
           potentialMatch.id != person.id
@@ -181,13 +181,13 @@ function searchForSiblings(person, people) {
         }
         //breakpoint
       });
-    }
+    };
     siblings = siblings.map(function(name){
       return name.firstName + ' ' + name.lastName 
     })
   } else if (person.parents.length === 1) {
 
-    siblings += people.filter(function (potentialMatch) {
+    siblings = people.filter(function (potentialMatch) {
       if (
         potentialMatch.parents.includes(person.parents[0]) &&
         potentialMatch.id != person.id
