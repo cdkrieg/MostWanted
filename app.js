@@ -250,7 +250,7 @@ function displayFamily(person, people) {
   let parents = searchForParents(person, people);
   let siblings = searchForSiblings(person, people);
   alert(
-    "Spouse: " + spouse + " " + "Parents: " + parents + "Siblings: " + siblings
+    "Spouse: " + spouse + " " + "Parent(s): " + parents + ", Sibling(s): " + siblings
   );
 }
 
