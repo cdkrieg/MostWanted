@@ -123,20 +123,12 @@ function searchByID(id, people) {
 function searchForParents(person, people) {
   if (person.parents.length == 1) {
     let parent = searchByID(person.parents[0], people);
-    parent = parent.firstName + " " + parent.lastName;
-    return parent;
+    return giveName(parent);
   } else if (person.parents.length == 2) {
     let parent0 = searchByID(person.parents[0], people);
     let parent1 = searchByID(person.parents[1], people);
-    let parents =
-      parent0.firstName +
-      " " +
-      parent0.lastName +
-      " & " +
-      parent1.firstName +
-      " " +
-      parent1.lastName;
-    return parents;
+ 
+    return giveName(parent0) + giveName(parent1);
   } else {
     return "No Parents";
   }
@@ -160,12 +152,47 @@ function searchForKids(person, people) {
       return false;
     }
   });
-  if (kids.length > 0) {
-    for (let i = 0; i < kids.length; i++) {
-      searchForKids(kids[i]);
+  if(kids){
+    let descendants = searchForGrandkids(kids, people);
+    if (descendants !== "No Grandchildren"){
+      return giveName(kids) + "\n" + "Grandchildren: " + descendants;
+    } else {
+      return giveName(kids);
+    }
+  } else {
+    return "No Children";
+  }
+
+  
+}
+
+function searchForGrandkids(parents, people){
+  let grandKids = parents.map(function(parent){
+    return people.filter(function (potentialMatch) {
+    if (potentialMatch.parents.includes(parent.id)) {
+      return true;
+    } else {
+      return false;
+    }
+  })});
+  for(let i = 0; i < grandKids.length; i++){
+    if(grandKids[i].length < 1){
+      grandKids.splice(i,1);
+      i--;
     }
   }
+  if(grandKids.length > 0){
+    let newGrandkids = [];
+    for(let i = 0; i<grandKids.length; i++){
+      newGrandkids[i] = grandKids[i].pop();
+    }  
+    return giveName(newGrandkids);
+  } else {
+      return "No Grandchildren";
+  }
+  
 }
+
 function searchForSiblings(person, people) {
   let siblings = [];
   if (person.parents.length === 2) {
@@ -182,9 +209,8 @@ function searchForSiblings(person, people) {
         //breakpoint
       });
     }
-    siblings = siblings.map(function (name) {
-      return name.firstName + " " + name.lastName;
-    });
+      return giveName(siblings);
+
   } else if (person.parents.length === 1) {
     siblings = people.filter(function (potentialMatch) {
       if (
@@ -195,10 +221,8 @@ function searchForSiblings(person, people) {
       } else {
         return false;
       }
-    });
-    siblings = siblings.map(function (name) {
-      return name.firstName + " " + name.lastName;
-    });
+    }); 
+      return giveName(siblings);
     //breakpoint
   } else {
     siblings = "No siblings";
