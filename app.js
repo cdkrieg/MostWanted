@@ -17,7 +17,40 @@ function app(people) {
       searchResults = searchByName(people);
       break;
     case "no":
-      searchResults = searchByTraits(people).pop();
+      //prompt
+      let mulitSearch = promptFor(
+        "Do you want to search for mulitple traits?",
+        yesNo
+      ).toLowerCase();
+      if (mulitSearch === "yes") {
+        searchResults = searchByTraits(people).pop();
+      } else {
+        let searchOne = promptFor(
+          "What do you want to search by ? \n gender? \n eye color? \n height and weight? \n occupation? ",
+          autoValid
+        );
+        switch (searchOne) {
+          case "gender":
+            displayPeople(searchByGender(people));
+            break;
+          case "eye color":
+            displayPeople(searchByEyeColor(people));
+            break;
+          case "height":
+            displayPeople(searchByHeight(people));
+            break;
+          case "weight":
+            displayPeople(searchByWeight(people));
+            break;
+          case "occupation":
+            displayPeople(searchByOccupation(people));
+            break;
+          case "quit":
+            return; // stop execution
+          default:
+            return mainMenu(person, people); // ask again
+        }
+      }
       //searchResults = searchByEyeColor(people);
       break;
     default:
@@ -91,115 +124,125 @@ function searchByName(people) {
 }
 
 function searchByTraits(people, traitsToSearch, traitValue) {
-  if(traitsToSearch === undefined){
-      let numberOfTraits = promptFor("You can search by 1-5 traits. Please enter the number of traits to search by.", autoValid);
-      traitsToSearch = [];
-      traitValue = [];
-      let traits;
-      for(let i = 0; i < numberOfTraits; i++){
-          traits = promptFor("Enter one of the following traits:\n eye color, date of birth, height, weight, occupation, gender", autoValid);
-          traitValue.push(promptFor("Enter value for " + traits, autoValid));
-          traitsToSearch.push(traits);
-          switch (traitsToSearch[i]){
-          case "eye color":
-              traitsToSearch[i] = "eyeColor";
-              break;
-          case "date of birth":
-              traitsToSearch[i] = "dob";
-              break;
-          default:
-              break;
-          }
+  if (traitsToSearch === undefined) {
+    let numberOfTraits = promptFor(
+      "You can search by 1-5 traits. Please enter the number of traits to search by.",
+      autoValid
+    );
+    traitsToSearch = [];
+    traitValue = [];
+    let traits;
+    for (let i = 0; i < numberOfTraits; i++) {
+      traits = promptFor(
+        "Enter one of the following traits:\n eye color, date of birth, height, weight, occupation, gender",
+        autoValid
+      );
+      traitValue.push(promptFor("Enter value for " + traits, autoValid));
+      traitsToSearch.push(traits);
+      switch (traitsToSearch[i]) {
+        case "eye color":
+          traitsToSearch[i] = "eyeColor";
+          break;
+        case "date of birth":
+          traitsToSearch[i] = "dob";
+          break;
+        default:
+          break;
       }
-
+    }
   }
-  if(traitsToSearch.length > 0){  
-      let foundPerson = people.filter(function (potentialMatch) {
-        if (eval("potentialMatch." + traitsToSearch[0] + " == " + "traitValue[0]")) {
-          return true;
-          } else {
-          return false;
-          }
-      });
-      if(traitsToSearch.length > 1){
-          traitsToSearch.shift();
-          traitValue.shift();
-          return foundPerson = searchByTraits(foundPerson, traitsToSearch, traitValue);
+  if (traitsToSearch.length > 0) {
+    let foundPerson = people.filter(function (potentialMatch) {
+      if (
+        eval("potentialMatch." + traitsToSearch[0] + " == " + "traitValue[0]")
+      ) {
+        return true;
       } else {
-        return foundPerson;
+        return false;
       }
+    });
+    if (traitsToSearch.length > 1) {
+      traitsToSearch.shift();
+      traitValue.shift();
+      return (foundPerson = searchByTraits(
+        foundPerson,
+        traitsToSearch,
+        traitValue
+      ));
+    } else {
+      return foundPerson;
+    }
   }
-
 }
 
-// function searchByEyeColor(people) {
-//   let eyeColor = prompt("What is the person's eye color?", autoValid);
-//   let foundPerson = people.filter(function (potentialMatch) {
-//     if (potentialMatch.eyeColor === eyeColor) {
-//       return true;
-//     } else {
-//       return false;
-//     }
-//   });
-//   return foundPerson;
-// }
+function searchByEyeColor(people) {
+  let eyeColor = prompt("What is the person's eye color?", autoValid);
+  let foundPerson = people.filter(function (potentialMatch) {
+    if (potentialMatch.eyeColor === eyeColor) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
 
-// function searchByDOB(people) {
-//   let dateOfBirth = prompt("What is the person's date of birth?", autoValid);
-//   let foundPerson = people.filter(function (potentialMatch) {
-//     if (potentialMatch.dob === dateOfBirth) {
-//       return true;
-//     } else {
-//       return false;
-//     }
-//   });
-//   return foundPerson;
-// }
-// function searchByHeight(people) {
-//   let height = prompt("What is the person's height?", autoValid);
-//   let foundPerson = people.filter(function (potentialMatch) {
-//     if (potentialMatch.height === height) {
-//       return true;
-//     } else {
-//       return false;
-//     } 
-//   });
-//   return foundPerson;
-// }
-// function searchByWeight(people) {
-//   let weight = prompt("What is the person's weight?", autoValid);
-//   let foundPerson = people.filter(function (potentialMatch) {
-//     if (potentialMatch.weight === weight) {
-//       return true;
-//     } else {
-//       return false;
-//     } 
-//   });
-//   return foundPerson;
-// }
-// function searchByOccupation(people) {
-//   let occupation = prompt("What is the person's occupation", autoValid);
-//   let foundPerson = people.filter(function (potentialMatch) {
-//     if (potentialMatch.occupation === occupation) {
-//       return true;
-//     } else {
-//       return false;
-//     } 
-//   });
-//   return foundPerson;
-// }
-// function searchByGender(people) {
-//   let gender = prompt("What is the person's gender?", autoValid);
-//   let foundPerson = people.filter(function (potentialMatch) {
-//     if (potentialMatch.gender === gender) {
-//       return true;
-//     } else {
-//       return false;
-//     } 
-//   });
-//   return foundPerson;
-// }
-// //DONE
+function searchByDOB(people) {
+  let dateOfBirth = prompt("What is the person's date of birth?", autoValid);
+  let foundPerson = people.filter(function (potentialMatch) {
+    if (potentialMatch.dob === dateOfBirth) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
+function searchByHeight(people) {
+  let height = prompt("What is the person's height?", autoValid);
+  let foundPerson = people.filter(function (potentialMatch) {
+    if (potentialMatch.height === height) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
+function searchByWeight(people) {
+  let weight = prompt("What is the person's weight?", autoValid);
+  let foundPerson = people.filter(function (potentialMatch) {
+    if (potentialMatch.weight === weight) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
+function searchByOccupation(people) {
+  let occupation = prompt("What is the person's occupation", autoValid);
+  let foundPerson = people.filter(function (potentialMatch) {
+    if (potentialMatch.occupation === occupation) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
+function searchByGender(people) {
+  let gender = prompt("What is the person's gender?", autoValid);
+  let foundPerson = people.filter(function (potentialMatch) {
+    if (potentialMatch.gender === gender) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
+//DONE
 function searchByID(id, people) {
   let foundPerson = people.filter(function (potentialMatch) {
     if (potentialMatch.id === id) {
@@ -218,8 +261,9 @@ function searchForParents(person, people) {
   } else if (person.parents.length == 2) {
     let parent0 = searchByID(person.parents[0], people);
     let parent1 = searchByID(person.parents[1], people);
- 
-    return giveName(parent0) + giveName(parent1);
+    let parents = giveName(parent0) + giveName(parent1);
+
+    return parents
   } else {
     return "No Parents";
   }
@@ -244,9 +288,9 @@ function searchForKids(person, people) {
       return false;
     }
   });
-  if(kids){
+  if (kids) {
     let descendants = searchForGrandkids(kids, people);
-    if (descendants !== "No Grandchildren"){
+    if (descendants !== "No Grandchildren") {
       return giveName(kids) + "\n" + "Grandchildren: " + descendants;
     } else {
       return giveName(kids);
@@ -256,31 +300,31 @@ function searchForKids(person, people) {
   }
 }
 //DONE
-function searchForGrandkids(parents, people){
-  let grandKids = parents.map(function(parent){
+function searchForGrandkids(parents, people) {
+  let grandKids = parents.map(function (parent) {
     return people.filter(function (potentialMatch) {
-    if (potentialMatch.parents.includes(parent.id)) {
-      return true;
-    } else {
-      return false;
-    }
-  })});
-  for(let i = 0; i < grandKids.length; i++){
-    if(grandKids[i].length < 1){
-      grandKids.splice(i,1);
+      if (potentialMatch.parents.includes(parent.id)) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  });
+  for (let i = 0; i < grandKids.length; i++) {
+    if (grandKids[i].length < 1) {
+      grandKids.splice(i, 1);
       i--;
     }
   }
-  if(grandKids.length > 0){
+  if (grandKids.length > 0) {
     let newGrandkids = [];
-    for(let i = 0; i<grandKids.length; i++){
+    for (let i = 0; i < grandKids.length; i++) {
       newGrandkids[i] = grandKids[i].pop();
-    }  
+    }
     return giveName(newGrandkids);
   } else {
-      return "No Grandchildren";
+    return "No Grandchildren";
   }
-  
 }
 //DONE
 function searchForSiblings(person, people) {
@@ -299,8 +343,7 @@ function searchForSiblings(person, people) {
         //breakpoint
       });
     }
-      return giveName(siblings);
-
+    return giveName(siblings);
   } else if (person.parents.length === 1) {
     siblings = people.filter(function (potentialMatch) {
       if (
@@ -311,8 +354,8 @@ function searchForSiblings(person, people) {
       } else {
         return false;
       }
-    }); 
-      return giveName(siblings);
+    });
+    return giveName(siblings);
     //breakpoint
   } else {
     siblings = "No siblings";
@@ -377,15 +420,27 @@ function displayDescendants(person, people) {
   alert("Kids: " + kids);
 }
 //DONE
+// function giveName(names) {
+//   let namesCompleted = names;
+//   if (Array.isArray(namesCompleted)) {
+//     namesCompleted.map(function (namesCompleted) {
+//       return namesCompleted.firstName + " " + namesCompleted.lastName + "\n";
+//     });
+//     namesCompleted.join("\n");
+//   } else {
+//     return namesCompleted.firstName + " " + namesCompleted.lastName + "\n";
+//   }
+//   return namesCompleted;
+// }
 function giveName(names) {
-  let namesCompleted = names
-  if(Array.isArray(namesCompleted)){
-    namesCompleted.map(function (namesCompleted) {
-      return namesCompleted.firstName + " " + namesCompleted.lastName + "\n";
-    })
-    namesCompleted.join("\n");
-  } else {
-    return namesCompleted.firstName + " " + namesCompleted.lastName + "\n";
+  let namesCompleted = names;
+  if (namesCompleted.length > 1) {
+    namesCompleted.map(function (names) {
+      return names.firstName + " " + names.lastName + "\n";
+    });
+    names.join("\n");
+  } else if (names.length === 1) {
+    namesCompleted = names.firstName + " " + names.lastName + "\n";
   }
   return namesCompleted;
 }
@@ -425,7 +480,7 @@ function autoValid(input) {
 }
 
 function isObject(val) {
-  return val instanceof Object; 
+  return val instanceof Object;
 }
 
 //Unfinished validation function you can use for any of your custom validation callbacks.
