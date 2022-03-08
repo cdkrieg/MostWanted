@@ -17,7 +17,8 @@ function app(people) {
       searchResults = searchByName(people);
       break;
     case "no":
-      searchResults = searchByEyeColor(people);
+      searchResults = searchByTraits(people).pop();
+      //searchResults = searchByEyeColor(people);
       break;
     default:
       app(people); // restart app
@@ -89,79 +90,116 @@ function searchByName(people) {
   return foundPerson[0];
 }
 
-//unfinished function to search through an array of people to find matching eye colors. Use searchByName as reference.
-//TODO: add other trait filter functions here.
+function searchByTraits(people, traitsToSearch, traitValue) {
+  if(traitsToSearch === undefined){
+      let numberOfTraits = promptFor("You can search by 1-5 traits. Please enter the number of traits to search by.", autoValid);
+      traitsToSearch = [];
+      traitValue = [];
+      let traits;
+      for(let i = 0; i < numberOfTraits; i++){
+          traits = promptFor("Enter one of the following traits:\n eye color, date of birth, height, weight, occupation, gender", autoValid);
+          traitValue.push(promptFor("Enter value for " + traits, autoValid));
+          traitsToSearch.push(traits);
+          switch (traitsToSearch[i]){
+          case "eye color":
+              traitsToSearch[i] = "eyeColor";
+              break;
+          case "date of birth":
+              traitsToSearch[i] = "dob";
+              break;
+          default:
+              break;
+          }
+      }
 
-function searchByEyeColor(people) {
-  let eyeColor = prompt("What is the person's eye color?", autoValid);
-  let foundPerson = people.filter(function (potentialMatch) {
-    if (potentialMatch.eyeColor === eyeColor) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  return foundPerson;
-}
+  }
+  if(traitsToSearch.length > 0){  
+      let foundPerson = people.filter(function (potentialMatch) {
+        if (eval("potentialMatch." + traitsToSearch[0] + " == " + "traitValue[0]")) {
+          return true;
+          } else {
+          return false;
+          }
+      });
+      if(traitsToSearch.length > 1){
+          traitsToSearch.shift();
+          traitValue.shift();
+          return foundPerson = searchByTraits(foundPerson, traitsToSearch, traitValue);
+      } else {
+        return foundPerson;
+      }
+  }
 
-function searchByDOB(people) {
-  let dateOfBirth = prompt("What is the person's date of birth?", autoValid);
-  let foundPerson = people.filter(function (potentialMatch) {
-    if (potentialMatch.dob === dateOfBirth) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  return foundPerson;
-}
-function searchByHeight(people) {
-  let height = prompt("What is the person's height?", autoValid);
-  let foundPerson = people.filter(function (potentialMatch) {
-    if (potentialMatch.height === height) {
-      return true;
-    } else {
-      return false;
-    } 
-  });
-  return foundPerson;
-}
-function searchByWeight(people) {
-  let weight = prompt("What is the person's weight?", autoValid);
-  let foundPerson = people.filter(function (potentialMatch) {
-    if (potentialMatch.weight === weight) {
-      return true;
-    } else {
-      return false;
-    } 
-  });
-  return foundPerson;
-}
-function searchByOccupation(people) {
-  let occupation = prompt("What is the person's occupation", autoValid);
-  let foundPerson = people.filter(function (potentialMatch) {
-    if (potentialMatch.occupation === occupation) {
-      return true;
-    } else {
-      return false;
-    } 
-  });
-  return foundPerson;
-}
-function searchByGender(people) {
-  let gender = prompt("What is the person's gender?", autoValid);
-  let foundPerson = people.filter(function (potentialMatch) {
-    if (potentialMatch.gender === gender) {
-      return true;
-    } else {
-      return false;
-    } 
-  });
-  return foundPerson;
 }
 
+// function searchByEyeColor(people) {
+//   let eyeColor = prompt("What is the person's eye color?", autoValid);
+//   let foundPerson = people.filter(function (potentialMatch) {
+//     if (potentialMatch.eyeColor === eyeColor) {
+//       return true;
+//     } else {
+//       return false;
+//     }
+//   });
+//   return foundPerson;
+// }
 
-//DONE
+// function searchByDOB(people) {
+//   let dateOfBirth = prompt("What is the person's date of birth?", autoValid);
+//   let foundPerson = people.filter(function (potentialMatch) {
+//     if (potentialMatch.dob === dateOfBirth) {
+//       return true;
+//     } else {
+//       return false;
+//     }
+//   });
+//   return foundPerson;
+// }
+// function searchByHeight(people) {
+//   let height = prompt("What is the person's height?", autoValid);
+//   let foundPerson = people.filter(function (potentialMatch) {
+//     if (potentialMatch.height === height) {
+//       return true;
+//     } else {
+//       return false;
+//     } 
+//   });
+//   return foundPerson;
+// }
+// function searchByWeight(people) {
+//   let weight = prompt("What is the person's weight?", autoValid);
+//   let foundPerson = people.filter(function (potentialMatch) {
+//     if (potentialMatch.weight === weight) {
+//       return true;
+//     } else {
+//       return false;
+//     } 
+//   });
+//   return foundPerson;
+// }
+// function searchByOccupation(people) {
+//   let occupation = prompt("What is the person's occupation", autoValid);
+//   let foundPerson = people.filter(function (potentialMatch) {
+//     if (potentialMatch.occupation === occupation) {
+//       return true;
+//     } else {
+//       return false;
+//     } 
+//   });
+//   return foundPerson;
+// }
+// function searchByGender(people) {
+//   let gender = prompt("What is the person's gender?", autoValid);
+//   let foundPerson = people.filter(function (potentialMatch) {
+//     if (potentialMatch.gender === gender) {
+//       return true;
+//     } else {
+//       return false;
+//     } 
+//   });
+//   return foundPerson;
+// }
+// //DONE
 function searchByID(id, people) {
   let foundPerson = people.filter(function (potentialMatch) {
     if (potentialMatch.id === id) {
@@ -326,10 +364,10 @@ function displayFamily(person, people) {
   alert(
     "Spouse: " +
       spouse +
-      " " +
+      " \n" +
       "Parent(s): " +
       parents +
-      ", Sibling(s): " +
+      "\nSibling(s): " +
       siblings
   );
 }
@@ -341,10 +379,14 @@ function displayDescendants(person, people) {
 //DONE
 function giveName(names) {
   let namesCompleted = names
-    .map(function (names) {
-      return names.firstName + " " + names.lastName;
+  if(Array.isArray(namesCompleted)){
+    namesCompleted.map(function (namesCompleted) {
+      return namesCompleted.firstName + " " + namesCompleted.lastName + "\n";
     })
-    .join("\n");
+    namesCompleted.join("\n");
+  } else {
+    return namesCompleted.firstName + " " + namesCompleted.lastName + "\n";
+  }
   return namesCompleted;
 }
 //#endregion
@@ -380,6 +422,10 @@ function yesNo(input) {
 //this will always return true for all inputs.
 function autoValid(input) {
   return true; // default validation only
+}
+
+function isObject(val) {
+  return val instanceof Object; 
 }
 
 //Unfinished validation function you can use for any of your custom validation callbacks.
