@@ -432,17 +432,24 @@ function displayDescendants(person, people) {
 //   }
 //   return namesCompleted;
 // }
+// function giveName(names) {
+//   let namesCompleted = names;
+//   if (namesCompleted.length > 1) {
+//     namesCompleted.map(function (names) {
+//       return names.firstName + " " + names.lastName + "\n";
+//     });
+//     names.join("\n");
+//   } else if (names.length === 1) {
+//     namesCompleted = names.firstName + " " + names.lastName + "\n";
+//   }
+//   return namesCompleted;
+// }
 function giveName(names) {
-  let namesCompleted = names;
-  if (namesCompleted.length > 1) {
-    namesCompleted.map(function (names) {
-      return names.firstName + " " + names.lastName + "\n";
-    });
-    names.join("\n");
-  } else if (names.length === 1) {
-    namesCompleted = names.firstName + " " + names.lastName + "\n";
+  let completeName = "";
+  for(let i = 0; i < names.length; i++) {
+    completeName += names[i].firstName + " " + names[i].lastName + "\n";
   }
-  return namesCompleted;
+  return completeName;
 }
 //#endregion
 
@@ -480,8 +487,7 @@ function autoValid(input) {
 }
 
 function isObject(val) {
-  return val instanceof Object;
-}
+  return val instanceof Object;}
 
 //Unfinished validation function you can use for any of your custom validation callbacks.
 //can be used for things like eye color validation for example.
