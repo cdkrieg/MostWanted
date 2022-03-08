@@ -288,7 +288,7 @@ function searchForKids(person, people) {
       return false;
     }
   });
-  if (kids) {
+  if (kids.length > 0) {
     let descendants = searchForGrandkids(kids, people);
     if (descendants !== "No Grandchildren") {
       return giveName(kids) + "\n" + "Grandchildren: " + descendants;
@@ -486,8 +486,7 @@ function autoValid(input) {
   return true; // default validation only
 }
 
-function isObject(val) {
-  return val instanceof Object;}
+
 
 //Unfinished validation function you can use for any of your custom validation callbacks.
 //can be used for things like eye color validation for example.
