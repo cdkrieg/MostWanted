@@ -20,7 +20,7 @@ function app(people) {
       if (mulitSearch === "yes") {
         searchResults = searchByTraits(people).pop();
       } else {
-        let searchOne = promptFor("What do you want to search by ? \n gender? \n eye color? \n height and weight? \n occupation? ",customValidation).toLowerCase();
+        let searchOne = promptFor("What do you want to search by ? \n gender? \n eye color? \n height? \n weight? \n occupation? \n quit?",customValidation).toLowerCase();
         switch (searchOne) {
           case "gender":
             displayPeople(searchByGender(people));
@@ -338,7 +338,7 @@ function searchForSiblings(person, people) {
     return giveName(siblings);
     //breakpoint
   } else {
-    siblings = "No siblings";
+    siblings = "No Siblings";
   }
   return siblings;
 }
@@ -454,21 +454,23 @@ function promptFor(question, valid) {
   return response;
 }
 
-// helper function/callback to pass into promptFor to validate yes/no answers.
-function yesNo(input) {
-  if (input.toLowerCase() == "yes" || input.toLowerCase() == "no") {
-    return true;
-  } else {
-    return false;
-  }
-}
+// // helper function/callback to pass into promptFor to validate yes/no answers.
+// function yesNo(input) {
+//   if (input.toLowerCase() == "yes" || input.toLowerCase() == "no") {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// }
 
 // helper function to pass in as default promptFor validation.
 //this will always return true for all inputs.
 function autoValid(input) {
-  return true; // default validation only
-}
+  if(input !== null) {
+    return true; // default validation only
 
+  }
+}
 
 
 //Unfinished validation function you can use for any of your custom validation callbacks.
