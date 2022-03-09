@@ -134,7 +134,7 @@ function searchByTraits(people, traitsToSearch, traitValue) {
   if (traitsToSearch.length > 0) {
     let foundPerson = people.filter(function (potentialMatch) {
       if (
-        eval("potentialMatch." + traitsToSearch[0].toLowerCase() + " == " + "traitValue[0]")
+        eval("potentialMatch." + traitsToSearch[0] + " == " + "traitValue[0]")
       ) {
         return true;
       } else {
@@ -158,7 +158,7 @@ function searchByTraits(people, traitsToSearch, traitValue) {
 function searchByEyeColor(people) {
   let eyeColor = promptFor("What is the person's eye color?", traitsValidation);
   let foundPerson = people.filter(function (potentialMatch) {
-    if (potentialMatch.eyeColor.toLowerCase() === eyeColor) {
+    if (potentialMatch.eyeColor === eyeColor) {
       return true;
     } else {
       return false;
@@ -203,7 +203,7 @@ function searchByWeight(people) {
 function searchByOccupation(people) {
   let occupation = promptFor("What is the person's occupation", traitsValidation);
   let foundPerson = people.filter(function (potentialMatch) {
-    if (potentialMatch.occupation.toLowerCase() === occupation) {
+    if (potentialMatch.occupation === occupation) {
       return true;
     } else {
       return false;
@@ -214,7 +214,7 @@ function searchByOccupation(people) {
 function searchByGender(people) {
   let gender = promptFor("What is the person's gender?", traitsValidation);
   let foundPerson = people.filter(function (potentialMatch) {
-    if (potentialMatch.gender.toLowerCase() === gender) {
+    if (potentialMatch.gender === gender) {
       return true;
     } else {
       return false;
@@ -445,9 +445,12 @@ function giveName(names) {
 function promptFor(question, valid) {
   let isValid;
   do {
-    var response = prompt(question).trim();
+    var response = prompt(question);
+    if(response !== null){
+      response.trim();
+    }
     isValid = valid(response);
-  } while (response === "" || isValid === false);
+  } while (response === "" || isValid === false || response === null);
   return response;
 }
 
@@ -471,23 +474,24 @@ function autoValid(input) {
 //Unfinished validation function you can use for any of your custom validation callbacks.
 //can be used for things like eye color validation for example.
 function customValidation(input) {
-  switch (input.toLowerCase()) {
-
-    case "yes":
-    case "no":
-    case "eye color":
-    case "date of birth":
-    case "dob":
-    case "height":
-    case "weight":
-    case "occupation":
-    case "gender":
-    case "family":
-    case "descendants":
-    case "info":
-      return true;
-    default:
-      return false;
+  if(input !== null){
+    switch (input.toLowerCase()) {
+      case "yes":
+      case "no":
+      case "eye color":
+      case "date of birth":
+      case "dob":
+      case "height":
+      case "weight":
+      case "occupation":
+      case "gender":
+      case "family":
+      case "descendants":
+      case "info":
+        return true;
+      default:
+        return false;
+    }
   }
 }
 
@@ -503,26 +507,28 @@ function traitsValidation(input){
   if(parseInt(input) > 0){
     return true;
   }
-  switch (input.toLowerCase()){
-    case "brown":
-    case "blue":
-    case "hazel":
-    case "black":
-    case "green":
-    case "male":
-    case "female":
-    case "programmer":
-    case "assistant":
-    case "doctor":
-    case "landscaper":
-    case "nurse":
-    case "student":
-    case "architect":
-    case "politician":
-      return true;
-    default:
-      return false;
-    
+  if(input !== null){
+    switch (input.toLowerCase()){
+      case "brown":
+      case "blue":
+      case "hazel":
+      case "black":
+      case "green":
+      case "male":
+      case "female":
+      case "programmer":
+      case "assistant":
+      case "doctor":
+      case "landscaper":
+      case "nurse":
+      case "student":
+      case "architect":
+      case "politician":
+        return true;
+      default:
+        return false;
+      
+    }
   }
 }
 
@@ -534,16 +540,60 @@ function dateValidation(input){
   }
 }
 
-function testValidation(people, input, trait) {
+// function testValidation(people, input, trait) {
+//   let found = false;
+//   //
+//   for (let i = 0; i < people.length; i++) {
+//     if (people[i].firstName == input) {
+//       found = true;
+//       break;
+//     }
+//   }
+//   return found
+// }
+function testValidation(people, input, traits) {
+  let trait = traitsValidation(traits, keys)
+  let key = 1;
   let found = false;
-  //
-  for (let i = 0; i < people.length; i++) {
-    if (people[i].firstName == input) {
-      found = true;
-      break;
+  const keys = [
+    "id",
+    "firstName",
+    "lastName",
+    "gender",
+    "dob",
+    "height",
+    "weight",
+    "eyeColor",
+    "occupation",
+    "parents",
+    "currentSpouse",
+  ];
+
+  if (keys.includes(trait)) {
+    for (let i = 0; i < people.length; i++) {
+      if (people[i][keys[key]] == input) {
+        found = true;
+        break;
+      }
+      
     }
+  } else {
+    alert("Not valid entry");
+    return testValidation(people, input, trait);
   }
-  return found
+  return found;
+}
+
+
+function traitsValidation(trait, keys) {
+  let returnTrait;
+  for (let i = 0; i < keys.length; i++) {
+    if(keys[i].toLowerCase() === trait.toLowerCase() ){
+      returnTrait = keys[i]
+    }
+    
+  }
+  return returnTrait
 }
 
 
