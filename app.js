@@ -20,24 +20,24 @@ function app(people) {
       if (mulitSearch === "yes") {
         searchResults = searchByTraits(people).pop();
       } else {
-        let searchOne = promptFor("What do you want to search by ? \n gender? \n eye color? \n height? \n weight? \n occupation? \n quit?",customValidation).toLowerCase();
+        let searchOne = promptFor("What do you want to search by? \n Press 1 for gender? \n  Press 2 for eye color? \n  Press 3 for height? \n  Press 4 for weight? \n  Press 5 for occupation? \n  Press 6 for quit?", numberValidation)
         switch (searchOne) {
-          case "gender":
+          case "1":
             displayPeople(searchByGender(people));
-            break;
-          case "eye color":
+            return app(people);
+          case "2":
             displayPeople(searchByEyeColor(people));
-            break;
-          case "height":
+            return app(people);
+          case "3":
             displayPeople(searchByHeight(people));
-            break;
-          case "weight":
+            return app(people);
+          case "4":
             displayPeople(searchByWeight(people));
-            break;
-          case "occupation":
+            return app(people);
+          case "5":
             displayPeople(searchByOccupation(people));
-            break;
-          case "quit":
+            return app(people);
+          case "6":
             return; // stop execution
           default:
             return mainMenu(person, people); // ask again
@@ -156,7 +156,7 @@ function searchByTraits(people, traitsToSearch, traitValue) {
 }
 
 function searchByEyeColor(people) {
-  let eyeColor = promptFor("What is the person's eye color?", traitsValidation);
+  let eyeColor = promptFor("What is the person's eye color?", testValidation);
   let foundPerson = people.filter(function (potentialMatch) {
     if (potentialMatch.eyeColor === eyeColor) {
       return true;
@@ -201,7 +201,7 @@ function searchByWeight(people) {
   return foundPerson;
 }
 function searchByOccupation(people) {
-  let occupation = promptFor("What is the person's occupation", traitsValidation);
+  let occupation = promptFor("What is the person's occupation", testValidation);
   let foundPerson = people.filter(function (potentialMatch) {
     if (potentialMatch.occupation === occupation) {
       return true;
@@ -212,7 +212,7 @@ function searchByOccupation(people) {
   return foundPerson;
 }
 function searchByGender(people) {
-  let gender = promptFor("What is the person's gender?", traitsValidation);
+  let gender = promptForSearch("What is the person's gender?", people, testValidation, 'gender');
   let foundPerson = people.filter(function (potentialMatch) {
     if (potentialMatch.gender === gender) {
       return true;
@@ -442,7 +442,7 @@ function giveName(names) {
 //response: Will capture the user input.
 //isValid: Will capture the return of the validation function callback. true(the user input is valid)/false(the user input was not valid).
 //this function will continue to loop until the user enters something that is not an empty string("") or is considered valid based off the callback function(valid).
-function promptFor(question, valid) {
+function promptFor(question,valid) {
   let isValid;
   do {
     var response = prompt(question);
@@ -450,6 +450,18 @@ function promptFor(question, valid) {
       response.trim();
     }
     isValid = valid(response);
+  } while (response === "" || isValid === false || response === null);
+  return response;
+}
+
+function promptForSearch(question, people, valid, item) {
+  let isValid;
+  do {
+    var response = prompt(question);
+    if(response !== null){
+      response.trim();
+    }
+    isValid = valid(people, response, item);
   } while (response === "" || isValid === false || response === null);
   return response;
 }
@@ -505,35 +517,6 @@ function numberValidation(input){
   }
 }
 
-function traitsValidation(input){
-  if(parseInt(input) > 0){
-    return true;
-  }
-  if(input !== null){
-    switch (input.toLowerCase()){
-      case "brown":
-      case "blue":
-      case "hazel":
-      case "black":
-      case "green":
-      case "male":
-      case "female":
-      case "programmer":
-      case "assistant":
-      case "doctor":
-      case "landscaper":
-      case "nurse":
-      case "student":
-      case "architect":
-      case "politician":
-        return true;
-      default:
-        return false;
-      
-    }
-  }
-}
-
 function dateValidation(input){
   if(Date.parse(input) !== NaN){
     return true;
@@ -542,21 +525,7 @@ function dateValidation(input){
   }
 }
 
-// function testValidation(people, input, trait) {
-//   let found = false;
-//   //
-//   for (let i = 0; i < people.length; i++) {
-//     if (people[i].firstName == input) {
-//       found = true;
-//       break;
-//     }
-//   }
-//   return found
-// }
-function testValidation(people, input, traits) {
-  let trait = traitsValidation(traits, keys)
-  let key = 1;
-  let found = false;
+function testValidation(people, input, item ) {
   const keys = [
     "id",
     "firstName",
@@ -570,8 +539,10 @@ function testValidation(people, input, traits) {
     "parents",
     "currentSpouse",
   ];
+  let key = keys.indexOf(item)
+  let found = false;
 
-  if (keys.includes(trait)) {
+  if (key) {
     for (let i = 0; i < people.length; i++) {
       if (people[i][keys[key]] == input) {
         found = true;
@@ -579,24 +550,10 @@ function testValidation(people, input, traits) {
       }
       
     }
-  } else {
-    alert("Not valid entry");
-    return testValidation(people, input, trait);
-  }
+  } 
   return found;
 }
 
-
-function traitsValidation(trait, keys) {
-  let returnTrait;
-  for (let i = 0; i < keys.length; i++) {
-    if(keys[i].toLowerCase() === trait.toLowerCase() ){
-      returnTrait = keys[i]
-    }
-    
-  }
-  return returnTrait
-}
 
 
 //#endregion
