@@ -47,6 +47,7 @@ function app(people) {
             return app(people);
           case "6":
             displayPeople(searchByDOB(people))
+            return app(people);
           default:
             return mainMenu(person, people); // ask again
         }
@@ -139,7 +140,7 @@ function searchByTraits(people, traitsToSearch, traitValue) {
     let traits;
     for (let i = 0; i < numberOfTraits; i++) { // change to while loop
       traits = promptFor(
-        "What do you want to search by? \n Press 1 for gender? \n  Press 2 for eye color? \n  Press 3 for height? \n  Press 4 for weight? \n  Press 5 for occupation?",
+        "What do you want to search by? \n Press 1 for gender? \n  Press 2 for eye color? \n  Press 3 for height? \n  Press 4 for weight? \n  Press 5 for occupation? \n  Press 6 for DOB?",
         numberValidation
       );
       switch (traits) {
@@ -157,6 +158,9 @@ function searchByTraits(people, traitsToSearch, traitValue) {
           break;
         case "5":
           traitsToSearch[i] = 'occupation'
+          break;
+        case "6":
+          traitsToSearch[i] = 'dob'
           break;
       }
       traitValue.push(promptForSearch(`Enter the value for ${traitsToSearch[i]} `, people, customValidation, traitsToSearch[i]));
