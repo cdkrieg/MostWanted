@@ -548,7 +548,7 @@ function autoValid(input) {
 //can be used for things like eye color validation for example.
 
 function numberValidation(input) {
-  if (parseInt(input) > 0 && parseInt(input) < 6) {
+  if (parseInt(input) >= 0 && parseInt(input) <= 6) {
     return true;
   } else {
     return false;
