@@ -8,7 +8,9 @@
 // app is the function called to start the entire application
 function app(people) {
   let searchType = promptFor(
-    "Do you know the name of the person you are looking for? Enter 'yes' or 'no'", customValidation).toLowerCase();
+    "Do you know the name of the person you are looking for? Enter 'yes' or 'no'",
+    yesNo
+  );
   let searchResults;
   switch (searchType) {
     case "yes":
@@ -16,11 +18,17 @@ function app(people) {
       break;
     case "no":
       //prompt
-      let mulitSearch = promptFor("Do you want to search for mulitple traits?", customValidation).toLowerCase();
+      let mulitSearch = promptFor(
+        "Do you want to search for mulitple traits?",
+        yesNo
+      );
       if (mulitSearch === "yes") {
         searchResults = searchByTraits(people).pop();
       } else {
-        let searchOne = promptFor("What do you want to search by? \n Press 1 for gender? \n  Press 2 for eye color? \n  Press 3 for height? \n  Press 4 for weight? \n  Press 5 for occupation? \n  Press 6 for quit?", numberValidation)
+        let searchOne = promptFor(
+          "What do you want to search by? \n Press 1 for gender? \n  Press 2 for eye color? \n  Press 3 for height? \n  Press 4 for weight? \n  Press 5 for occupation? \n  Press 6 for quit?",
+          numberValidation
+        );
         switch (searchOne) {
           case "1":
             displayPeople(searchByGender(people));
@@ -43,7 +51,6 @@ function app(people) {
             return mainMenu(person, people); // ask again
         }
       }
-      //searchResults = searchByEyeColor(people);
       break;
     default:
       app(people); // restart app
@@ -63,7 +70,14 @@ function mainMenu(person, people) {
     return app(people); // restart
   }
 
-  let displayOption = promptFor("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'", customValidation).toLowerCase();
+  let displayOption = promptFor(
+    "Found " +
+      person.firstName +
+      " " +
+      person.lastName +
+      " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'",
+    customValidation
+  ).toLowerCase();
 
   switch (displayOption) {
     case "info":
@@ -93,8 +107,14 @@ function mainMenu(person, people) {
 //#region
 
 function searchByName(people) {
-  let firstName = promptFor("What is the person's first name?", autoValid).toLowerCase();
-  let lastName = promptFor("What is the person's last name?", autoValid).toLowerCase();
+  let firstName = promptFor(
+    "What is the person's first name?",
+    autoValid
+  ).toLowerCase();
+  let lastName = promptFor(
+    "What is the person's last name?",
+    autoValid
+  ).toLowerCase();
   let foundPerson = people.filter(function (potentialMatch) {
     if (
       potentialMatch.firstName.toLowerCase() === firstName &&
@@ -110,25 +130,37 @@ function searchByName(people) {
 
 function searchByTraits(people, traitsToSearch, traitValue) {
   if (traitsToSearch === undefined) {
-    let numberOfTraits = promptFor("You can search by 1-5 traits. Please enter the number of traits to search by.", numberValidation);
+    let numberOfTraits = promptFor(
+      "You can search by 1-5 traits. Please enter the number of traits to search by.",
+      numberValidation
+    );
     traitsToSearch = [];
     traitValue = [];
     let traits;
-    for (let i = 0; i < numberOfTraits; i++) {
-      traits = promptFor("Enter one of the following traits:\n eye color, date of birth, height, weight, occupation, gender", customValidation).toLowerCase();
-      traitValue.push(promptFor("Enter value for " + traits, traitsValidation));
-      traitsToSearch.push(traits);
-      switch (traitsToSearch[i]) {
-        case "eye color":
-          traitsToSearch[i] = "eyeColor";
+    for (let i = 0; i < numberOfTraits; i++) { // change to while loop
+      traits = promptFor(
+        "What do you want to search by? \n Press 1 for gender? \n  Press 2 for eye color? \n  Press 3 for height? \n  Press 4 for weight? \n  Press 5 for occupation?",
+        numberValidation
+      );
+      switch (traits) {
+        case "1":
+          traitsToSearch[i] = 'gender'
           break;
-        case "date of birth":
-        case "dob":
-          traitsToSearch[i] = "dob";
+        case "2":
+          traitsToSearch[i] = 'eyeColor'
           break;
-        default:
+        case "3":
+          traitsToSearch[i] = 'height'
+          break;
+        case "4":
+          traitsToSearch[i] = 'weight'
+          break;
+        case "5":
+          traitsToSearch[i] = 'occupation'
           break;
       }
+      traitValue.push(promptForSearch(`Enter the value for ${traitsToSearch[i]} `, people, customValidation, traitsToSearch[i]));
+      //traitsToSearch.push(traits);
     }
   }
   if (traitsToSearch.length > 0) {
@@ -141,6 +173,7 @@ function searchByTraits(people, traitsToSearch, traitValue) {
         return false;
       }
     });
+
     if (traitsToSearch.length > 1) {
       traitsToSearch.shift();
       traitValue.shift();
@@ -156,7 +189,12 @@ function searchByTraits(people, traitsToSearch, traitValue) {
 }
 
 function searchByEyeColor(people) {
-  let eyeColor = promptFor("What is the person's eye color?", testValidation);
+  let eyeColor = promptForSearch(
+    "What is the person's eye color?",
+    people,
+    customValidation,
+    "eyeColor"
+  );
   let foundPerson = people.filter(function (potentialMatch) {
     if (potentialMatch.eyeColor === eyeColor) {
       return true;
@@ -168,7 +206,10 @@ function searchByEyeColor(people) {
 }
 
 function searchByDOB(people) {
-  let dateOfBirth = promptFor("What is the person's date of birth?", dateValidation);
+  let dateOfBirth = promptFor(
+    "What is the person's date of birth?",
+    dateValidation
+  );
   let foundPerson = people.filter(function (potentialMatch) {
     if (Date.parse(potentialMatch.dob) === Date.parse(dateOfBirth)) {
       return true;
@@ -179,7 +220,12 @@ function searchByDOB(people) {
   return foundPerson;
 }
 function searchByHeight(people) {
-  let height = promptFor("What is the person's height?", numberValidation);
+  let height = promptForSearch(
+    "What is the person's height?",
+    people,
+    customValidation,
+    "height"
+  );
   let foundPerson = people.filter(function (potentialMatch) {
     if (potentialMatch.height == height) {
       return true;
@@ -190,7 +236,12 @@ function searchByHeight(people) {
   return foundPerson;
 }
 function searchByWeight(people) {
-  let weight = promptFor("What is the person's weight?", numberValidation);
+  let weight = promptForSearch(
+    "What is the person's weight?",
+    people,
+    customValidation,
+    "weight"
+  );
   let foundPerson = people.filter(function (potentialMatch) {
     if (potentialMatch.weight == weight) {
       return true;
@@ -201,7 +252,12 @@ function searchByWeight(people) {
   return foundPerson;
 }
 function searchByOccupation(people) {
-  let occupation = promptFor("What is the person's occupation", testValidation);
+  let occupation = promptForSearch(
+    "What is the person's occupation",
+    people,
+    customValidation,
+    "occupation"
+  );
   let foundPerson = people.filter(function (potentialMatch) {
     if (potentialMatch.occupation === occupation) {
       return true;
@@ -212,7 +268,12 @@ function searchByOccupation(people) {
   return foundPerson;
 }
 function searchByGender(people) {
-  let gender = promptForSearch("What is the person's gender?", people, testValidation, 'gender');
+  let gender = promptForSearch(
+    "What is the person's gender?",
+    people,
+    customValidation,
+    "gender"
+  );
   let foundPerson = people.filter(function (potentialMatch) {
     if (potentialMatch.gender === gender) {
       return true;
@@ -243,7 +304,7 @@ function searchForParents(person, people) {
     let parent1 = searchByID(person.parents[1], people);
     let parents = giveName(parent0) + giveName(parent1);
 
-    return parents
+    return parents;
   } else {
     return "No Parents";
   }
@@ -426,7 +487,7 @@ function displayDescendants(person, people) {
 // }
 function giveName(names) {
   let completeName = "";
-  for(let i = 0; i < names.length; i++) {
+  for (let i = 0; i < names.length; i++) {
     completeName += names[i].firstName + " " + names[i].lastName + "\n";
   }
   return completeName;
@@ -442,11 +503,11 @@ function giveName(names) {
 //response: Will capture the user input.
 //isValid: Will capture the return of the validation function callback. true(the user input is valid)/false(the user input was not valid).
 //this function will continue to loop until the user enters something that is not an empty string("") or is considered valid based off the callback function(valid).
-function promptFor(question,valid) {
+function promptFor(question, valid) {
   let isValid;
   do {
     var response = prompt(question);
-    if(response !== null){
+    if (response !== null) {
       response.trim();
     }
     isValid = valid(response);
@@ -458,7 +519,7 @@ function promptForSearch(question, people, valid, item) {
   let isValid;
   do {
     var response = prompt(question);
-    if(response !== null){
+    if (response !== null) {
       response.trim();
     }
     isValid = valid(people, response, item);
@@ -467,65 +528,42 @@ function promptForSearch(question, people, valid, item) {
 }
 
 // // helper function/callback to pass into promptFor to validate yes/no answers.
-// function yesNo(input) {
-//   if (input.toLowerCase() == "yes" || input.toLowerCase() == "no") {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// }
-
-// helper function to pass in as default promptFor validation.
-//this will always return true for all inputs.
-function autoValid(input) {
-  if(input !== null) {
-    return true; // default validation only
-
-  }
-}
-
-
-//Unfinished validation function you can use for any of your custom validation callbacks.
-//can be used for things like eye color validation for example.
-function customValidation(input) {
-  if(input !== null){
-    switch (input.toLowerCase()) {
-      case "yes":
-      case "no":
-      case "eye color":
-      case "date of birth":
-      case "dob":
-      case "height":
-      case "weight":
-      case "occupation":
-      case "gender":
-      case "family":
-      case "descendants":
-      case "info":
-        return true;
-      default:
-        return false;
-    }
-  }
-}
-
-function numberValidation(input){
-  if(parseInt(input) > 0 && parseInt(input) < 6){
-    return true
+function yesNo(input) {
+  if (input.toLowerCase() == "yes" || input.toLowerCase() == "no") {
+    return true;
   } else {
     return false;
   }
 }
 
-function dateValidation(input){
-  if(Date.parse(input) !== NaN){
-    return true;
-  } else {
-    return false
+// helper function to pass in as default promptFor validation.
+//this will always return true for all inputs.
+function autoValid(input) {
+  if (input !== null) {
+    return true; // default validation only
   }
 }
 
-function testValidation(people, input, item ) {
+//Unfinished validation function you can use for any of your custom validation callbacks.
+//can be used for things like eye color validation for example.
+
+function numberValidation(input) {
+  if (parseInt(input) > 0 && parseInt(input) < 6) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function dateValidation(input) {
+  if (Date.parse(input) !== NaN) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function customValidation(people, input, item) {
   const keys = [
     "id",
     "firstName",
@@ -539,7 +577,7 @@ function testValidation(people, input, item ) {
     "parents",
     "currentSpouse",
   ];
-  let key = keys.indexOf(item)
+  let key = keys.indexOf(item);
   let found = false;
 
   if (key) {
@@ -548,12 +586,9 @@ function testValidation(people, input, item ) {
         found = true;
         break;
       }
-      
     }
-  } 
+  }
   return found;
 }
-
-
 
 //#endregion
