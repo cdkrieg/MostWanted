@@ -26,7 +26,7 @@ function app(people) {
         searchResults = searchByTraits(people).pop();
       } else {
         let searchOne = promptFor(
-          "What do you want to search by? \n Press 1 for gender? \n  Press 2 for eye color? \n  Press 3 for height? \n  Press 4 for weight? \n  Press 5 for occupation? \n  Press 6 for quit?",
+          "What do you want to search by? \n Press 1 for gender? \n  Press 2 for eye color? \n  Press 3 for height? \n  Press 4 for weight? \n  Press 5 for occupation? \n  Press 6 for DOB?",
           numberValidation
         );
         switch (searchOne) {
@@ -46,7 +46,7 @@ function app(people) {
             displayPeople(searchByOccupation(people));
             return app(people);
           case "6":
-            return; // stop execution
+            displayPeople(searchByDOB(people))
           default:
             return mainMenu(person, people); // ask again
         }
