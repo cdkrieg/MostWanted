@@ -300,8 +300,8 @@ function searchForParents(person, people) {
     let parent = searchByID(person.parents[0], people);
     return giveName(parent);
   } else if (person.parents.length == 2) {
-    let parent0 = searchByID(person.parents[0], people);
-    let parent1 = searchByID(person.parents[1], people);
+    let parent0 = [searchByID(person.parents[0], people)];
+    let parent1 = [searchByID(person.parents[1], people)];
     let parents = giveName(parent0) + giveName(parent1);
 
     return parents;
@@ -488,7 +488,7 @@ function displayDescendants(person, people) {
 function giveName(names) {
   let completeName = "";
   for (let i = 0; i < names.length; i++) {
-    completeName += names[i].firstName + " " + names[i].lastName + "\n";
+    completeName += "\n" + names[i].firstName + " " + names[i].lastName;
   }
   return completeName;
 }
